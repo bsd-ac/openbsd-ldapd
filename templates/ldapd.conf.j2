@@ -7,7 +7,7 @@ listen on lo0 secure
 schema "/etc/ldap/core.schema"
 schema "/etc/ldap/inetorgperson.schema"
 schema "/etc/ldap/nis.schema"
-schema "/etc/ldap/excision.schema"
+schema "/etc/ldap/ldap_extras.schema"
 
 {% for domain in ldap_domains %}
 namespace "dc={{ domain.name }},dc={{ domain.tld }}" {
