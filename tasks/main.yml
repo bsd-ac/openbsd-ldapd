@@ -1,0 +1,41 @@
+---
+- name: install additional ldap packages
+  openbsd_pkg:
+    name: '{{ item }}'
+    state: present
+  with_items: "{{ ldap_packages }}"
+
+- name: install schema files
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/ldap/{{ item }}"
+  with_items: "{{ ldap_schemas }}"
+
+- name: make sure extra config files exist
+  file:
+    path: "{{ item }}"
+    state: touch
+    owner: root
+    group: wheel
+    mode: 0600
+  with_items:
+    - "/etc/ldapd_before.conf"
+    - "/etc/ldapd_after.conf"
+
+- name: generate ldap config file
+  template:
+    src: ldapd.conf.j2
+    dest: /etc/ldapd.conf
+    mode: 0600
+    owner: root
+    group: wheel
+    validate: /usr/sbin/ldapd -n -f %s
+  notify: restart ldapd
+
+- name: enable and start ldapd service
+  service:
+    name: ldapd
+    state: started
+    enabled: true
+
+
