@@ -32,6 +32,8 @@ ldap_indexes:
 ldap_schemas:
   - "ldap_extras.schema"
 
+ldap_packages:
+  - openldap-client
 
 ldap_groups: [
         { gidnum: 666, name: _ldap, member_uids: [ puffy ] }
